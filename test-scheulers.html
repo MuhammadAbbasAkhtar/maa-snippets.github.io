@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Scheduler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">Activity Scheduler</h1>
+    
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">9:00 AM - 10:00 AM</label>
+      <select id="slot1" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+        <option value="" disabled selected>Select an activity</option>
+        <option value="Archery">Archery</option>
+        <option value="Chess">Chess</option>
+        <option value="Painting">Painting</option>
+        <option value="Guitar Lessons">Guitar Lessons</option>
+        <option value="Photography">Photography</option>
+        <option value="Yoga">Yoga</option>
+        <option value="Creative Writing">Creative Writing</option>
+      </select>
+    </div>
+    
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">10:00 AM - 11:00 AM</label>
+      <select id="slot2" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+        <option value="" disabled selected>Select an activity</option>
+        <option value="Robotics">Robotics</option>
+        <option value="Debate">Debate</option>
+        <option value="Coding">Coding</option>
+        <option value="Baking">Baking</option>
+        <option value="Science Experiments">Science Experiments</option>
+        <option value="Soccer">Soccer</option>
+        <option value="Pottery">Pottery</option>
+      </select>
+    </div>
+    
+    <div class="mb-4">
+      <label class="block text-sm font-medium text-gray-700">11:00 AM - 12:00 PM</label>
+      <select id="slot3" class="mt-1 block w-full p-2 border border-gray-300 rounded-md">
+        <option value="" disabled selected>Select an activity</option>
+        <option value="Drama">Drama</option>
+        <option value="Astronomy">Astronomy</option>
+        <option value="Dance">Dance</option>
+        <option value="3D Printing">3D Printing</option>
+        <option value="Gardening">Gardening</option>
+        <option value="Public Speaking">Public Speaking</option>
+      </select>
+    </div>
+    
+    <button id="submit" class="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600" disabled>Schedule All Slots</button>
+  </div>
+
+  <script>
+    const slot1 = document.getElementById('slot1');
+    const slot2 = document.getElementById('slot2');
+    const slot3 = document.getElementById('slot3');
+    const submitButton = document.getElementById('submit');
+
+    const activityOptions = {
+      'slot1': ['Archery', 'Chess', 'Painting', 'Guitar Lessons', 'Photography', 'Yoga', 'Creative Writing'],
+      'slot2': ['Robotics', 'Debate', 'Coding', 'Baking', 'Science Experiments', 'Soccer', 'Pottery'],
+      'slot3': ['Drama', 'Astronomy', 'Dance', '3D Printing', 'Gardening', 'Public Speaking']
+    };
+
+    function updateActivityOptions() {
+      const selectedActivities = [
+        slot1.value,
+        slot2.value,
+        slot3.value
+      ].filter(val => val);
+
+      const slots = [slot1, slot2, slot3];
+      const slotIds = ['slot1', 'slot2', 'slot3'];
+
+      slots.forEach((slot, index) => {
+        const currentValue = slot.value;
+        slot.innerHTML = '<option value="" disabled selected>Select an activity</option>';
+        
+        activityOptions[slotIds[index]].forEach(activity => {
+          if (!selectedActivities.includes(activity) || activity === currentValue) {
+            const option = document.createElement('option');
+            option.value = activity;
+            option.textContent = activity;
+            slot.appendChild(option);
+          }
+        });
+
+        slot.value = currentValue;
+      });
+
+      const allFilled = slot1.value && slot2.value && slot3.value;
+      const uniqueActivities = new Set([slot1.value, slot2.value, slot3.value]).size === 3;
+      submitButton.disabled = !(allFilled && uniqueActivities);
+    }
+
+    slot1.addEventListener('change', updateActivityOptions);
+    slot2.addEventListener('change', updateActivityOptions);
+    slot3.addEventListener('change', updateActivityOptions);
+
+    submitButton.addEventListener('click', () => {
+      if (slot1.value && slot2.value && slot3.value) {
+        const schedule = `
+          9:00 AM - 10:00 AM: ${slot1.value}
+          10:00 AM - 11:00 AM: ${slot2.value}
+          11:00 AM - 12:00 PM: ${slot3.value}
+        `;
+        alert(`Scheduled:\n${schedule}`);
+      }
+    });
+
+    updateActivityOptions();
+  </script>
+</body>
+</html>
